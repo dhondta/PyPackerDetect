@@ -34,7 +34,8 @@ class PyPackerDetect:
         """ Analyze the input PE file for suspicions and/or detections of packers. """
         r, s = {'detections': [], 'suspicions': []}, .0
         def __add(i, msg):
-            self.logger.debug(msg)
+            if self.logger:
+                self.logger.debug("%s:%s" % (['DETECTION', 'SUSPICION'][i], msg))
             r[['detections', 'suspicions'][i]].append(msg)
         if not isinstance(pe, pefile.PE):
             path = pe
