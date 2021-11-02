@@ -82,6 +82,8 @@ def main():
         if dt != "":
             print(dt)
     except Exception as e:
+        if "magic not found." in str(e):
+            e.value = "Not a PE file"
         if str(e) != "no result":
             args.logger.exception(e)
         code = 1

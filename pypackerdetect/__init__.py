@@ -112,8 +112,9 @@ class PyPackerDetect:
         if self.__config['peid']:
             db = os.path.join(os.path.dirname(__file__), "db", "sigs_long.txt") if self.__config['peid_large_db'] \
                  else os.path.join(os.path.dirname(__file__), "db", "sigs_short.txt")
-            for m in peid.identify_packer(pe, db, self.__config['peid_ep_only'], self.logger):
-                __add(0, "Found PEID signature: %s" % m)
+            for m in peid.identify_packer(pe, db=db, ep_only=self.__config['peid_ep_only'], logger=self.logger):
+                if len(m[1]) > 0:
+                    __add(0, "Found PEID signature: %s" % ", ".join(m[1]))
         return r
     
     @staticmethod
