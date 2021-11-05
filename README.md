@@ -1,3 +1,6 @@
+<h1 align="center">PyPackerDetect <a href="https://twitter.com/intent/tweet?text=PyPackerDetect%20-%20Packer%20detector%20using%20multiple%20heuristics%20and%20PEiD's%20signatures%20database.%0D%0Ahttps%3a%2f%2fgithub%2ecom%2fdhondta%2fPyPackerDetect%0D%0A&hashtags=python,pe,peid,packer,packingdetection"><img src="https://img.shields.io/badge/Tweet--lightgrey?logo=twitter&style=social" alt="Tweet" height="20"/></a></h1>
+<h3 align="center">Detect packers on PE files using heuristics and signatures.</h3>
+
 [![PyPi](https://img.shields.io/pypi/v/pypackerdetect.svg)](https://pypi.python.org/pypi/pypackerdetect/)
 [![Build Status](https://travis-ci.com/dhondta/pypackerdetect.svg?branch=main)](https://travis-ci.com/dhondta/pypackerdetect)
 [![Python Versions](https://img.shields.io/pypi/pyversions/pypackerdetect.svg)](https://pypi.python.org/pypi/pypackerdetect/)
@@ -6,19 +9,13 @@
 [![License](https://img.shields.io/pypi/l/pypackerdetect.svg)](https://pypi.python.org/pypi/pypackerdetect/)
 
 
-## Introduction
-
 A complete refactoring of [this project](https://github.com/cylance/PyPackerDetect) to a Python package with a console script to detect whether an executable is packed.
 
 [pefile](https://github.com/erocarrera/pefile) is used for PE parsing. [peid](https://github.com/dhondta/peid) is used as implementation of PEiD.
 
-## Setup
-
 ```session
-$ pip3 install pypackerdetect
+$ pip install pypackerdetect
 ```
-
-## Usage
 
 ```session
 $ pypackerdetect --help
@@ -30,7 +27,7 @@ usage examples:
 - pypackerdetect program.exe --imports-threshold 5 --bad-sections-threshold 5
 ```
 
-## Detection Mechanisms
+## :bulb: Detection Mechanisms
 
 - PEID signatures
 - Known packer section names
@@ -38,3 +35,12 @@ usage examples:
 - Threshhold of non-standard sections reached
 - Low number of imports
 - Overlapping entrypoint sections
+
+
+## :clap:  Supporters
+
+[![Stargazers repo roster for @dhondta/PyPackerDetect](https://reporoster.com/stars/dark/dhondta/PyPackerDetect)](https://github.com/dhondta/PyPackerDetect/stargazers)
+
+[![Forkers repo roster for @dhondta/PyPackerDetect](https://reporoster.com/forks/dark/dhondta/PyPackerDetect)](https://github.com/dhondta/PyPackerDetect/network/members)
+
+<p align="center"><a href="#"><img src="https://img.shields.io/badge/Back%20to%20top--lightgrey?style=social" alt="Back to top" height="20"/></a></p>
