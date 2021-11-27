@@ -1,3 +1,4 @@
+<p align="center"><img src="https://github.com/dhondta/PyPackerDetect/raw/master/logo.png"></p>
 <h1 align="center">PyPackerDetect <a href="https://twitter.com/intent/tweet?text=PyPackerDetect%20-%20Packer%20detector%20using%20multiple%20heuristics%20and%20PEiD's%20signatures%20database.%0D%0Ahttps%3a%2f%2fgithub%2ecom%2fdhondta%2fPyPackerDetect%0D%0A&hashtags=python,pe,peid,packer,packingdetection"><img src="https://img.shields.io/badge/Tweet--lightgrey?logo=twitter&style=social" alt="Tweet" height="20"/></a></h1>
 <h3 align="center">Detect packers on PE files using heuristics and signatures.</h3>
 
