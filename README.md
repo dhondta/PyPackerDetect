@@ -1,3 +1,4 @@
+<p align="center"><img src="https://github.com/dhondta/PyPackerDetect/raw/master/logo.png"></p>
 <h1 align="center">PyPackerDetect <a href="https://twitter.com/intent/tweet?text=PyPackerDetect%20-%20Packer%20detector%20using%20multiple%20heuristics%20and%20PEiD's%20signatures%20database.%0D%0Ahttps%3a%2f%2fgithub%2ecom%2fdhondta%2fPyPackerDetect%0D%0A&hashtags=python,pe,peid,packer,packingdetection"><img src="https://img.shields.io/badge/Tweet--lightgrey?logo=twitter&style=social" alt="Tweet" height="20"/></a></h1>
 <h3 align="center">Detect packers on PE files using heuristics and signatures.</h3>
 
@@ -6,6 +7,7 @@
 [![Python Versions](https://img.shields.io/pypi/pyversions/pypackerdetect.svg)](https://pypi.python.org/pypi/pypackerdetect/)
 [![Requirements Status](https://requires.io/github/dhondta/pypackerdetect/requirements/?branch=main)](https://requires.io/github/dhondta/pypackerdetect/requirements/?branch=main)
 [![Known Vulnerabilities](https://snyk.io/test/github/dhondta/pypackerdetect/badge.svg?targetFile=requirements.txt)](https://snyk.io/test/github/dhondta/pypackerdetect?targetFile=requirements.txt)
+[![DOI](https://zenodo.org/badge/384872434.svg)](https://zenodo.org/badge/latestdoi/384872434)
 [![License](https://img.shields.io/pypi/l/pypackerdetect.svg)](https://pypi.python.org/pypi/pypackerdetect/)
 
 
