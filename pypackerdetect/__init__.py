@@ -90,11 +90,12 @@ class PyPackerDetect:
             try:
                 for lib in pe.DIRECTORY_ENTRY_IMPORT:
                     if lib.dll.decode("ascii").strip().rstrip("\0").lower() == "mscoree.dll":
-                        return  # .NET assembly, counting imports is misleading as they will have a low number
+                        c = -1  # .NET assembly, counting imports is misleading as they will have a low number
+                        break
                     c += len(lib.imports)
             except AttributeError as e:
                 pass
-            if (c <= self.__thresholds['imports']):
+            if (0 <= c <= self.__thresholds['imports']):
                 __add(0, "Too few imports (total: %d)" % c)
         # non standard sections
         if self.__config['unknown_sec']:
