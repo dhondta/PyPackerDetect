@@ -56,7 +56,7 @@ class PyPackerDetect:
                 if p is not None:
                     d['packer'].append(n)
             except UnicodeDecodeError:
-                d['bad'].append(n)
+                d['bad'].append(s.Name.decode('latin1').strip().rstrip("\0"))
                 __add(1, "Section name with invalid characters")
         # bad entry point sections
         __intersect = lambda l1, l2: len(set(l1).intersection(l2)) > 0
