@@ -39,6 +39,18 @@ usage examples:
 - Overlapping entrypoint sections
 
 
+## :star: Related Projects
+
+You may also like these:
+
+- [Awesome Executable Packing](https://github.com/dhondta/awesome-executable-packing): A curated list of awesome resources related to executable packing.
+- [Bintropy](https://github.com/dhondta/bintropy): Analysis tool for estimating the likelihood that a binary contains compressed or encrypted bytes.
+- [Dataset of packed ELF files](https://github.com/dhondta/dataset-packed-elf): Dataset of ELF samples packed with many different packers.
+- [Dataset of packed PE files](https://github.com/dhondta/dataset-packed-pe): Dataset of PE samples packed with many different packers.
+- [Docker Packing Box](https://github.com/dhondta/docker-packing-box): Docker image gathering packers and tools for making datasets of packed executables.
+- [PEiD](https://github.com/dhondta/peid): Python implementation of the Packed Executable iDentifier (PEiD).
+
+
 ## :clap:  Supporters
 
 [![Stargazers repo roster for @dhondta/PyPackerDetect](https://reporoster.com/stars/dark/dhondta/PyPackerDetect)](https://github.com/dhondta/PyPackerDetect/stargazers)
