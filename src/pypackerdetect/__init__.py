@@ -3,6 +3,8 @@ import json
 import os
 import pefile
 import peid
+import re
+from functools import cached_property
 
 
 __all__ = ["PyPackerDetect", "PACKERS", "SECTIONS"]
@@ -12,6 +14,23 @@ with open(os.path.join(os.path.dirname(__file__), "db", "packers.json")) as f:
     PACKERS = json.load(f)['packers']
 with open(os.path.join(os.path.dirname(__file__), "db", "sections.json")) as f:
     SECTIONS = json.load(f)['sections']
+
+
+# dirty fix for section names requiring to get their real names from the string table (as pefile does not seem to handle
+#  this in every case)
+class PE(pefile.PE):
+    @cached_property
+    def real_section_names(self):
+        from subprocess import check_output
+        try:
+            names, out = [], check_output(["objdump", "-h", self.path]).decode()
+        except FileNotFoundError:
+            return
+        for l in out.split("\n"):
+            m = re.match(r"\s+\d+\s(.*?)\s+", l)
+            if m:
+                names.append(m.group(1))
+        return names
 
 
 class PyPackerDetect:
@@ -39,21 +58,28 @@ class PyPackerDetect:
             r[['detections', 'suspicions'][i]].append(msg)
         if not isinstance(pe, pefile.PE):
             path = pe
-            pe = pefile.PE(path)
+            pe = PE(path)
             pe.path = path
         ep = pe.OPTIONAL_HEADER.AddressOfEntryPoint
         # parse the input PE file
         d = {'all': [], 'bad': [], 'ep': [], 'packer': [], 'unknown': []}
-        for s in pe.sections:
+        for i, s in enumerate(pe.sections):
             try:
                 n = s.Name.decode("ascii").strip().rstrip("\0")
+                # special case: for some executables compiled with debug information, some sections may be named with
+                #                the format "/[N]" where N is the offset in the string table ; in this case, we compute
+                #                the real section names and map them to the shortened ones to compare the relevant names
+                #                with the database of known section names
+                if re.match(r"^\/\d+$", n) and pe.real_section_names:
+                    n = pe.real_section_names[i]
                 d['all'].append(n)
                 if ep >= s.VirtualAddress and ep <= (s.VirtualAddress + s.Misc_VirtualSize):
                     d['ep'].append(n)
                 if n not in SECTIONS['known']:
                     d['unknown'].append(n)
                 p = PACKERS.get(n)
-                if p is not None:
+                # even if found in the packers database, ensure the related section name does not clash with a known one
+                if p is not None and n not in SECTIONS['known']:
                     d['packer'].append(n)
             except UnicodeDecodeError:
                 d['bad'].append(s.Name.decode('latin1').strip().rstrip("\0"))
