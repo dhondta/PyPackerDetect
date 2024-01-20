@@ -38,7 +38,7 @@ classifiers = [
 ]
 dependencies = [
   "pefile",
-  "peid>=1.1.0",
+  "peid>=2.0.0",
 ]
 dynamic = ["version"]
 
