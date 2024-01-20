@@ -1,10 +1,10 @@
 # -*- coding: UTF-8 -*-
 import json
 import os
-import pefile
 import peid
 import re
-from functools import cached_property
+from functools import lru_cache
+from pefile import PE
 
 
 __all__ = ["PyPackerDetect", "PACKERS", "SECTIONS"]
@@ -16,21 +16,26 @@ with open(os.path.join(os.path.dirname(__file__), "db", "sections.json")) as f:
     SECTIONS = json.load(f)['sections']
 
 
-# dirty fix for section names requiring to get their real names from the string table (as pefile does not seem to handle
-#  this in every case)
-class PE(pefile.PE):
-    @cached_property
-    def real_section_names(self):
-        from subprocess import check_output
-        try:
-            names, out = [], check_output(["objdump", "-h", self.path]).decode()
-        except FileNotFoundError:
-            return
-        for l in out.split("\n"):
-            m = re.match(r"\s+\d+\s(.*?)\s+", l)
-            if m:
-                names.append(m.group(1))
-        return names
+@lru_cache
+def _real_section_names(path, logger=None, timeout=10):
+    from subprocess import Popen, PIPE, TimeoutExpired
+    p, names = Popen(["objdump", "-h", path], stdout=PIPE, stderr=PIPE), []
+    try:
+        out, err = p.communicate(timeout=timeout)
+    except TimeoutExpired:
+        if logger:
+            logger.debug(f"objdump: timeout ({timeout} seconds)")
+        return
+    if err:
+        if logger:
+            for l in err.decode("latin-1").strip().split("\n"):
+                logger.debug(l)
+        return
+    for l in out.decode("latin-1").strip().split("\n"):
+        m = re.match(r"\s+\d+\s(.*?)\s+", l)
+        if m:
+            names.append(m.group(1))
+    return names
 
 
 class PyPackerDetect:
@@ -56,7 +61,7 @@ class PyPackerDetect:
             if self.logger:
                 self.logger.debug("%s:%s" % (['DETECTION', 'SUSPICION'][i], msg))
             r[['detections', 'suspicions'][i]].append(msg)
-        if not isinstance(pe, pefile.PE):
+        if not isinstance(pe, PE):
             path = pe
             pe = PE(path)
             pe.path = path
@@ -70,8 +75,8 @@ class PyPackerDetect:
                 #                the format "/[N]" where N is the offset in the string table ; in this case, we compute
                 #                the real section names and map them to the shortened ones to compare the relevant names
                 #                with the database of known section names
-                if re.match(r"^\/\d+$", n) and pe.real_section_names:
-                    n = pe.real_section_names[i]
+                if re.match(r"^\/\d+$", n) and _real_section_names(pe.path, logger=self.logger):
+                    n = _real_section_names[i]
                 d['all'].append(n)
                 if ep >= s.VirtualAddress and ep <= (s.VirtualAddress + s.Misc_VirtualSize):
                     d['ep'].append(n)
@@ -147,7 +152,7 @@ class PyPackerDetect:
     @staticmethod
     def report(pe, findings):
         """ Report findings like the original project. """
-        print("Packer report for: %s" % (getattr(pe, "path", "unknown path") if isinstance(pe, pefile.PE) else pe))
+        print("Packer report for: %s" % (getattr(pe, "path", "unknown path") if isinstance(pe, PE) else pe))
         print("\tDetections: %d" % len(findings['detections']))
         print("\tSuspicions: %d" % len(findings['suspicions']))
         if len(findings['detections']) > 0 or len(findings['suspicions']) > 0:
